@@ -35,45 +35,49 @@ public class martiandna{
 				
 			
 			}
-			int[] results = new int[rawdnasize];
-			for (int i = 0; i < rawdnasize; i++){
-				int[] histogram_copy = new int[alphabetsize];
-				for (int j = 0; j < alphabetsize; j++){
-					histogram_copy[j] = histogram[j];
-				}
-				int counter = 0;
-				for (int j = i; j < rawdnasize; j++){
-					if (histogram_copy[intDNA[j]]!=0){
-						histogram_copy[intDNA[j]] = histogram_copy[intDNA[j]]-1;
-						counter = counter + 1;
-
-					}else{
-						counter = counter + 1;
-					}		
-				}
-				boolean exhausted = true;
-				for (int j = 0; j < alphabetsize; j++){
-					if(histogram_copy[j]!=0){
-						exhausted = false;
-						break;
-					}else{
-						exhausted = true;
+			int[] results = new int[85];//needs better implementation
+			for (int z = rawdnasize; z > 0; z--){
+				for (int i = 0; i < rawdnasize; i++){
+					int[] histogram_copy = new int[alphabetsize];
+					for (int j = 0; j < alphabetsize; j++){
+						histogram_copy[j] = histogram[j];
 					}
-				}
-				if (exhausted){
-					results[i] = counter;
+					
+					int counter = 0;
+					for (int j = i; j < z; j++){
+						if (histogram_copy[intDNA[j]]!=0){
+							histogram_copy[intDNA[j]] = histogram_copy[intDNA[j]]-1;
+							counter = counter + 1;
+
+						}else{
+							counter = counter + 1;
+						}		
+					}
+
+					boolean exhausted = true;
+					for (int j = 0; j < alphabetsize; j++){
+						if(histogram_copy[j]!=0){
+							exhausted = false;
+							break;
+						}else{
+							exhausted = true;
+						}
+					}
+					if (exhausted){
+						results[i] = counter;
+					}
 				}
 			}
 
-			int smallest_num = 0;
+			int smallest_num = results[0];
 			for (int i = 0; i < results.length; i++){
-				if (results[i]<smallest_num && results[i]!=0){
-					System.out.println("here");
+				if (i==0 && results[i]==0){
+					smallest_num = 0;
+				}else if (results[i]<smallest_num && results[i]!=0){
 					smallest_num = results[i];
 				}
 			}
 			
-			System.out.println(smallest_num);
 			if (smallest_num!=0){
 				System.out.println(smallest_num);
 			}else{
