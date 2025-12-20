@@ -1,0 +1,48 @@
+'''
+The question is:
+Given the root of a binary tree, return the length of the longest consecutive sequence path.
+A consecutive sequence path is a path where the values increase by one along the path.
+Note that the path can start at any node in the tree, and you cannot go from a node to its parent in the path.
+
+The reason for asking this question is to find the longest cosequtive increasing subpath located anywhere within the binary tree. The idea is to appreciate a means of keeping a memory of the longest sequence seen previously which is distinct from finding a new longer subpath.
+
+The approach to solving this probelem first involves building a recursive structure that tracks the length of a consequtive subpath. Next, it involves keeping a cache of the longest consequtive subpath for a given node and its children. A subtelty to be noted is that the consequtive sequence is 0-indexed which means that the final answer must account for an additional 1 to shift the result back to the expected 1-index.
+
+
+'''
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution(object):
+    def longestConsecutive(self, root):
+        """
+        :type root: Optional[TreeNode]
+        :rtype: int
+        """
+        return max(self.subproblem(root.left, root.val)[1], self.subproblem(root.right, root.val)[1]) + 1
+    
+    def subproblem(self, root, value):
+        if root is None:
+            return [0,0]
+        
+        if root.val == value + 1:
+            left = self.subproblem(root.left, root.val)
+            right = self.subproblem(root.right, root.val)
+            leftRunningCounter = left[0]
+            rightRunningCounter = right[0]
+            leftLongestSequence = left[1]
+            rightLongestSequence = right[1]
+            runningCounter = 1 + max(leftRunningCounter, rightRunningCounter)
+            longestSequence = max(runningCounter, leftLongestSequence, rightLongestSequence)
+            return [runningCounter, longestSequence]
+        else:
+            runningCounter = 0
+            left = self.subproblem(root.left, root.val)[1]
+            right = self.subproblem(root.right, root.val)[1]
+            longestSequence = max(left, right)
+            return [runningCounter, longestSequence]
+        
+        

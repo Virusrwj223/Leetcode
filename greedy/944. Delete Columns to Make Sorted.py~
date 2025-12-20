@@ -9,11 +9,7 @@ cae
 You want to delete the columns that are not sorted lexicographically. In the above example (0-indexed), columns 0 ('a', 'b', 'c') and 2 ('c', 'e', 'e') are sorted, while column 1 ('b', 'c', 'a') is not, so you would delete column 1.
 Return the number of columns that you will delete.
 
-The reason for asking this question is to find an efficient way to discover non-lexicographical columns. 
 
-A naive implementation may include seperating each column into their own list, sorting it and checking is the list retains semantic equality. However, this yields higher memory usage and a runtime of O(nklog(k)). An improved implementation involves greedily checking if the current letter is greater than the one above. This yiels a runtime of O(nk).
-
-In conclusion, the question enables understanding that unsorted lists can be found without the need for sorting and hence, removes redundant computation.
 '''
 class Solution:
     def minDeletionSize(self, strs):
