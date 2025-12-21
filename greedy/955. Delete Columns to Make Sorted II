@@ -9,6 +9,18 @@ We may choose any deletion indices, and we delete all the characters in those in
 For example, if we have strs = ["abcdef","uvwxyz"] and deletion indices {0, 2, 3}, then the final array after deletions is ["bef", "vyz"].
 
 Suppose we chose a set of deletion indices answer such that after deletions, the final array has its elements in lexicographic order (i.e., strs[0] <= strs[1] <= strs[2] <= ... <= strs[n - 1]). Return the minimum possible value of answer.length.
+
+The reason for asking this question is:
+To be able to return a minimum sorted array after deleting violating columns.
+
+My first approach involved a simple recursive structure to identify the number of violating columns independently. However this missed an edge case as observed in the key insight
+
+The key insight of this problem:
+Is recognising that one must account for a state that was previously passed when one state is deleted as that may have a cascading effect on the previously passed state. The main idea in this case is then to keep a list of deleted columns and go back to previously passed state to check if the newly deleted column has any new effect on the previously passed state.
+
+This naturally brings the idea of continuations that my second approach uses where the idea is to store the point of a program that was once passed and resume that program execution with the new context of newly deleted columns.
+
+In conclusion, the questions enables the understanding of being mindful of how one recursion branch may affect another and to think naturally on what one can do in such a situation rather than rely on fancy mathematical tricks.
 '''
 
 class Solution(object):
