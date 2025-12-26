@@ -27,6 +27,7 @@ A small edit to the previous prefix sum approach will be to check for the number
 The difficulty in implemening the question is:
 Because the entity can be closed after the customers have arrived, that means it is easier to keep a cache that is one larger than the number of customers. However, this resulted in off by one errors and confusion at different points of the algoithm
 
+One way to maybe prevent this is to maintain comments stating the invariants especially at such edge cases
 '''
 class Solution:
     def bestClosingTime(self, customers: str) -> int:
