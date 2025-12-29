@@ -1,0 +1,88 @@
+'''
+The question is:
+
+You are stacking blocks to form a pyramid. Each block has a color, which is represented by a single letter. Each row of blocks contains one less block than the row beneath it and is centered on top.
+
+To make the pyramid aesthetically pleasing, there are only specific triangular patterns that are allowed. A triangular pattern consists of a single block stacked on top of two blocks. The patterns are given as a list of three-letter strings allowed, where the first two characters of a pattern represent the left and right bottom blocks respectively, and the third character is the top block.
+
+For example, "ABC" represents a triangular pattern with a 'C' block stacked on top of an 'A' (left) and 'B' (right) block. Note that this is different from "BAC" where 'B' is on the left bottom and 'A' is on the right bottom.
+You start with a bottom row of blocks bottom, given as a single string, that you must use as the base of the pyramid.
+
+Given bottom and allowed, return true if you can build the pyramid all the way to the top such that every triangular pattern in the pyramid is in allowed, or false otherwise.
+
+The point of asking this question is:
+to conduct pattern matching of sets of three
+
+The way to implement this is:
+obviously to use some recursive structures to check for the possibility of a pattern matching. Therefore, the strategy is to find possible bottom layers and use that to form the next possible top layer.
+
+The main difficult faced is:
+Trying to rationalise about the implementation logic. At first, I only thought that there was exactly one bottom case. But it is possible to have multiple bottom cases which could yield correctness (or wrongness) in later parts of the recursion.
+
+In conclusion, this was quite an easy problem in hindsight but the main difficulty remained in terms of imagining what the possible impelemntation progress were without the need for printing the outputs.
+'''
+
+from itertools import product
+from typing import List
+
+class Solution:
+    def pyramidTransition(self, bottom: str, allowed: List[str]) -> bool:
+        self.allowedCache = {}
+        for term in allowed:
+            base = term[0:2]
+            terminal = term[-1]
+            if base not in self.allowedCache:
+                self.allowedCache[base] = [terminal]
+            else:
+                self.allowedCache[base].append(terminal)
+        return self.dp([bottom])
+
+    def dp(self, bottomList):    
+        # print('*', bottomList)    
+        if len(bottomList) > 0 and len(bottomList[0]) == 1:
+            return True
+        if len(bottomList) == 0:
+            return False
+        
+        topList = []
+        for bottom in bottomList:
+            tempList = []
+            error = False
+            for i in range(len(bottom) - 1):
+                bottomFragment = bottom[i:i+2]
+                if bottomFragment in self.allowedCache:
+                    tempList += [self.allowedCache[bottomFragment]]
+                else:
+                    error = True
+                    break
+            if error:
+                continue
+            if len(tempList) == 0:
+                return False
+            concatList = []
+            # print(tempList)
+            if len(tempList[0]) > 0:
+                concatList = [''.join(p) for p in product(*tempList)]
+            if self.dp(concatList):
+                return True
+
+        # print(topList)
+        return False
+
+def main():
+    candidate = Solution().pyramidTransition
+    print(1, candidate('AA', ['AAA']) == True)
+    print(2, candidate('AA', ['AAB']) == True)
+    print(3, candidate('AA', ['AAB', 'AAC']) == True)
+    print(4, candidate('AA', ['CCC']) == False)
+    print(5, candidate('ABCD', ['ABE', 'BCF', 'CDG', 'EFH', 'FGI', 'HIJ']) == True)
+    print(6, candidate('ABC', ['ABE', 'BCF', 'CDG', 'EFH', 'FGI', 'HIJ']) == True)
+    print(7, candidate('ABCD', ['ABE', 'BCF', 'CDG', 'EFH', 'FGI', 'HZJ']) == False)
+    print(8, candidate('ABCD', ['ABE', 'ZCF', 'CDG', 'EFH', 'FGI', 'HIJ']) == False)
+    print(9, candidate('ABCD', ['ABE', 'BCF', 'CDG', 'EYH', 'FGI', 'HIJ']) == False)
+    print(10, candidate('AAAA', ['AAA']) == True)
+    print(11, candidate('AAAA', ['AAa']) == False)
+    print(12, candidate('ABCD', ["ABC","BCA","CDA","ABD","BCE","CDF","DEA","EFF","AFF"]) == True)
+
+if __name__ == "__main__":
+    main()
