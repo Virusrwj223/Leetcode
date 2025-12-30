@@ -21,7 +21,6 @@ class Solution:
                 col3 = subgrid[0][2] + subgrid[1][2] + subgrid[2][2]
                 d1 = subgrid[0][0] + subgrid[1][1] + subgrid[2][2]
                 d2 = subgrid[0][2] + subgrid[1][1] + subgrid[2][0]
-                print(row1, row2, row3, col1, col2, col3, d1, d2)
                 if len(list(filter(lambda x: x != row1, [row1, row2, row3, col1, col2, col3, d1, d2]))) != 0:
                     continue
                 res += 1
