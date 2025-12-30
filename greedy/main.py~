@@ -21,7 +21,7 @@ class Solution:
 
         for i in range(1, len(meetings)):
             meeting = meetings[i]
-            prevMeetingEnd, num, _ = heapq.heappop(minHeap)
+            prevMeetingEnd, num, _ = None, None, None
 
             # if prevMeetingEnd <= meeting[0]:
             #     roomHeapPush(num)
@@ -29,7 +29,7 @@ class Solution:
             #     num = None
 
             while len(minHeap) > 0 and minHeap[0][0] <= meeting[0]:
-                endTime, roomNum, m = heapq.heappop(minHeap)
+                prevMeetingEnd, num, _ = heapq.heappop(minHeap)
                 roomHeapPush(roomNum)
 
             delay = 0
